@@ -2,11 +2,11 @@ import { HttpException, HttpStatus, NotFoundException } from "@nestjs/common";
 // import { error } from "console";
 
 export class ExceptionsHelper{
-    static emailDuplicateException(error: Error): void{
+    static DuplicateException(error: Error,name:string): void{
         throw new HttpException({
             status: HttpStatus.CONFLICT,
-            message: 'email duplicate',
-            errorCode: 'email_duplicate',
+            message: `${name} duplicate`,
+            errorCode: `${name}_duplicate`,
             data: {}
           }, HttpStatus.CONFLICT, {
             cause: error

@@ -40,7 +40,7 @@ export class AuthService {
                 }
             }
         }catch(error){
-            ExceptionsHelper.emailDuplicateException(error)
+            ExceptionsHelper.DuplicateException(error,'email')
         }
    }
    //construct data and validation objects

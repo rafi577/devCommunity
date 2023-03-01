@@ -2,6 +2,7 @@ import { Body, Controller, Post, Headers, Param, Get, UseGuards } from '@nestjs/
 import { PostDto } from './dto/Post.dto';
 import { PostService } from './post.service';
 import { AuthGuard } from '@nestjs/passport';
+import { User } from 'src/decorators/user.decorator';
 
 @Controller('post')
 export class PostController {
@@ -9,10 +10,8 @@ export class PostController {
 
     @Post()
     @UseGuards(AuthGuard('jwt'))
-    async create(@Body() body:PostDto,@Headers('authorization') bearerToken: string): Promise<PostDto> {
-        const token = bearerToken.split(' ')[1];
-        const userId:string = await this.postService.getUserIdFromAccessToken(token);
-        return await this.postService.create(body,userId);
+    async create(@Body() body:PostDto,@User() user): Promise<PostDto> {
+        return await this.postService.create(body,user._id);
     }
 
 

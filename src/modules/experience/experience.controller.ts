@@ -3,6 +3,7 @@ import { Body, Controller, Param, Headers, Post, Put, UseGuards } from '@nestjs/
 import { ExperienceService } from './experience.service';
 import { ExperienceDto } from './dto/experience.dto';
 import { Experience } from 'src/models/experience.schema';
+import { User } from 'src/decorators/user.decorator';
 
 @Controller('experience')
 export class ExperienceController {
@@ -10,10 +11,8 @@ export class ExperienceController {
 
     @Post()
     @UseGuards(AuthGuard('jwt'))
-    async create(@Body() body: ExperienceDto,@Headers('authorization') bearerToken:string):Promise<Partial<Experience>>{
-        const token = bearerToken.split(' ')[1];
-        const id = await this.experienceService.getUserIdFromAccessToken(token);
-        return this.experienceService.create(body,id);
+    async create(@Body() body: ExperienceDto,@User() user):Promise<Partial<Experience>>{
+        return this.experienceService.create(body,user._id);
     }
 
 

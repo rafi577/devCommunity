@@ -13,19 +13,6 @@ export class PostService {
 
     constructor(@InjectModel(Post.name) private createPostModel: Model<PostDocument>){}
 
-
-    async getUserIdFromAccessToken(accessToken: string): Promise<string> {
-        try{
-            const decodedToken: any = jwt.verify(accessToken, 'secret');
-            const userId: string = decodedToken.id;
-            return userId;
-        }
-        catch(err){
-            ExceptionsHelper.NotFoundErrorHandler(err,'accessToken');
-        }
-      }
-
-
     async create(body : PostDto, id:string): Promise<PostDto> {
         const data = {
             title:body.title,

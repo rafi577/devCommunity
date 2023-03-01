@@ -10,14 +10,7 @@ import { ExceptionsHelper } from 'src/helpers/Exceptions.helper';
 export class ExperienceService {
     constructor(@InjectModel(Experience.name) private readonly experienceModel:Model<ExperienceDocument>){}
 
-    async getUserIdFromAccessToken(accessToken: string): Promise<string> {
-        const decodedToken: any = jwt.verify(accessToken, 'secret');
-    
-        const userId: string = decodedToken.id;
-        // console.log(userId);
-    
-        return userId;
-    }
+
 
     async create(body : ExperienceDto,id:string):Promise<Partial<Experience>> {
         const {title,start_time,end_time, description} = body;
