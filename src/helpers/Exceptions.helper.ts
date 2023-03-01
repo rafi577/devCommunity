@@ -13,16 +13,23 @@ export class ExceptionsHelper{
           }); 
     }
 
-    static NotFound(error: Error): void{
-        throw new NotFoundException('Something bad happened', 
-            { 
-                cause: new Error(), 
-                description: 'User not found' 
+    static dataNotSaved(error: Error): void{
+        throw new HttpException({
+            status: HttpStatus.CONFLICT,
+            message: 'data not saved',
+            errorCode: 'data_not_saved',
+            data: {}
+          }, HttpStatus.INTERNAL_SERVER_ERROR, {
+            cause: error
+          }); 
+        // throw new HttpException('Data not saved', HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+
+    static NotFoundErrorHandler(error: Error,name:string): void{
+        throw new NotFoundException('Not Founded', 
+             { 
+                  cause: new Error(), 
+                  description: `${name} not Founded`
             })
     }
-    // throw new NotFoundException('Something bad happened', 
-    //         { 
-    //             cause: new Error(), 
-    //             description: 'User not found' 
-    //         })
 }

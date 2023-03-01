@@ -6,9 +6,8 @@ import { RegisterUserDto } from './dto/RegisterUser.dto';
 import * as bcrypt from "bcrypt";
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
-import { log } from 'console';
 import { JwtService } from '@nestjs/jwt';
-// import { IUser } from 'src/Interface/user.interface';
+
 
 
 @Injectable()
@@ -62,7 +61,6 @@ export class AuthService {
         const developer = await this.developerModel.findOne({email: email});
         const isPasswordMatch = await bcrypt.compare(password, developer.password);
         if(developer && isPasswordMatch){
-            // const id = developer._id;
             const payload = {
                 email,
                 id: developer._id
@@ -90,5 +88,4 @@ export class AuthService {
         return developer;
     }
 
-    // async getUserById(id: )
 }

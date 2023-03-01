@@ -1,5 +1,5 @@
 import { IsNotEmpty, IsString, MinLength, } from "class-validator";
-export class CreatePostDto{
+export class PostDto{
     @IsString()
     @IsNotEmpty()
     title: string;
