@@ -5,7 +5,7 @@ export type DeveloperDocument = HydratedDocument<Developer>;
 
 @Schema({timestamps: true})//
 export class Developer {
-    @Prop({required: true})
+    @Prop({required: true}) 
     phone: string;
 
 

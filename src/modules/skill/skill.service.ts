@@ -12,43 +12,39 @@ export class SkillService {
     constructor(@InjectModel(Skill.name) private skillModel: Model<SkillDocument>){}
 
     async create(body : SkillDto,id:string): Promise<SkillDto> {
-        try{
-            const {name,level} = body;
-            const data = {
-                name,
-                level,
-                devId:id
-            }
-            // await this.skillModel.createIndexes();
+        
+        const {name,level} = body;
+        const data = {
+            name,
+            level,
+            devId:id
+        }
+        const isSkillExist = await this.skillModel.findOne({name:name});
+        if(!isSkillExist){
             const skillData = await this.skillModel.create(data);
             return skillData.save();
         }
-        catch (err) {
-            ExceptionsHelper.DuplicateException(err,'Skill');
-        }
+        else ExceptionsHelper.DuplicateException('Skill');
+        
     }
 
     async getSkill(id:string):Promise<SkillDto[]>{
-        try{
-            const data = await this.skillModel.find({id});
-            if(data)return data;
-        }
-        catch(err){
-            ExceptionsHelper.NotFoundErrorHandler(err,'Skills');
-        }
+    
+        const data = await this.skillModel.find({id});
+        if(data)return data;
+        else ExceptionsHelper.NotFoundErrorHandler('Skills');
+        
     }
 
     async updateSkill(body:UpdateSkillDto,id:string):Promise<UpdateSkillDto>{
         const data = {
             level:body.level,
         }
-        try{
-            const  updateSkillData = await this.skillModel.updateOne({id},data);
-            return data;
-        }
-        catch(err){
-            ExceptionsHelper.dataNotSaved(err);
-        }
+    
+        const  updateSkillData = await this.skillModel.findOneAndUpdate({_id:id},data,{new:true});
+        if(updateSkillData) return updateSkillData.toObject();
+        else ExceptionsHelper.dataNotSaved('Unable to update, data');
+        
     }
 
 }

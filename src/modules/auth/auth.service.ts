@@ -17,16 +17,18 @@ export class AuthService {
     private readonly jwtService : JwtService
    ){}
 
-   async registerUser(body: RegisterUserDto): Promise<Partial<Developer> | object> {//Promise<Partial<Developer>>
+   async registerUser(body: RegisterUserDto): Promise<{ user: Partial<Developer>, accessToken: string }> {//Promise<Partial<Developer>>
         //? make password hashed
         const hashedPassword = await this.getHashedPass(body?.password);
 
         //? construct user object
-        const userToCreate = this.constructDataAndValidateObject(body,hashedPassword);
-
+        const developerObject :RegisterUserDto = await this.constructDeveloperObject(body,hashedPassword);
+        
         //todo insert user in db
-        try{
-            const user = await this.developerModel.create(userToCreate)
+        const isDeveloperExist = await this.developerModel.findOne({email:developerObject.email})
+        
+        if(!isDeveloperExist){
+            const user = await this.developerModel.create(developerObject)
             if(user){
                 const payload = {
                     email:user.email,
@@ -39,24 +41,29 @@ export class AuthService {
                     accessToken: accessToken
                 }
             }
-        }catch(error){
-            ExceptionsHelper.DuplicateException(error,'email')
+            else{
+                ExceptionsHelper.dataNotSaved('Unable to create developer,')
+            }
         }
+        else{
+            ExceptionsHelper.DuplicateException('Email')
+        }
+
    }
    //construct data and validation objects
-   async constructDataAndValidateObject(body:RegisterUserDto , hasPass:string): Promise<RegisterUserDto>{
+   async constructDeveloperObject(body:RegisterUserDto , hasPass:string): Promise<RegisterUserDto>{
         const userToCreate = {
             fname: body.fname ? body.fname : '',
             lname: body.lname ? body.lname : '',
-            email:body.email ? body.email : '',
             phone: body.phone ? body.phone : '-',
+            email:body.email ? body.email : '',
             password: hasPass
         }
         return userToCreate;
    }
 
 
-   async login(body:LoginUserDto):Promise<any>{
+   async login(body:LoginUserDto): Promise<{ accessToken: string; }>{
         const {email, password} = body;
         const developer = await this.developerModel.findOne({email: email});
         const isPasswordMatch = await bcrypt.compare(password, developer.password);
@@ -69,11 +76,7 @@ export class AuthService {
             return {accessToken: accessToken};
         }
         else{
-            throw new NotFoundException('Not Founded', 
-            { 
-                cause: new Error(), 
-                description: 'User not found' 
-            })
+            ExceptionsHelper.NotFoundErrorHandler('Email or Password')
         }
     }
 

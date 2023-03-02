@@ -21,13 +21,13 @@ export class ExperienceService {
             description,
             devId : id
         }
-        try{
-            const experienceData = this.experienceModel.create(data);
-            return experienceData;
-        }
-        catch(err){
-            ExceptionsHelper.dataNotSaved(err);
-        }
+        
+        const experienceData =await this.experienceModel.create(data);
+        
+        if(experienceData)return experienceData.save();
+        else ExceptionsHelper.dataNotSaved('experience data');
+        
+        
     }
 
     async update(id:number,body : ExperienceDto):Promise<ExperienceDto> {
@@ -38,19 +38,10 @@ export class ExperienceService {
             end_time,
             description
         }
-        try{
-            const experienceData = await this.experienceModel.updateOne({id},data);
-            return data;
-        }
-        catch(err){
-            throw new HttpException({
-                status: HttpStatus.CONFLICT,
-                message: 'data not updated',
-                errorCode: 'data_not_updated',
-                data: {}
-              }, HttpStatus.INTERNAL_SERVER_ERROR, {
-                cause: err
-              }); 
-        }
+        
+        const experienceData = await this.experienceModel.findOneAndUpdate({ _id: id }, data, { new: true });
+        if(experienceData)return experienceData.toObject();
+        else ExceptionsHelper.dataNotSaved('Unable to update experience, data');
+        
     }
 }

@@ -19,24 +19,26 @@ export class PostService {
             description:body.description,
             devId : id
         }
-        try{
-            const postData = await this.createPostModel.create(data);
+        
+        const postData = await this.createPostModel.create(data);
+
+        if(postData){
             return postData.save();
         }
-        catch(err){
-            ExceptionsHelper.dataNotSaved(err);
+        else{
+            ExceptionsHelper.dataNotSaved('post');
         }
-        
     }
-    async getAllPost(id:string):Promise<PostDto[]>{
-        try{
-            const post =await this.createPostModel.find({id});
-            if(post){
-                return post;
-            }
+
+
+    async getAllPostByUser(id:string, user):Promise<PostDto[]>{
+        
+        const post =await this.createPostModel.find({devId: user._id});
+        if(post){ 
+            return post;
         }
-        catch(err){
-            ExceptionsHelper.NotFoundErrorHandler(err,'data')
+        else{ 
+            ExceptionsHelper.NotFoundErrorHandler('developer')
         }
     }
 

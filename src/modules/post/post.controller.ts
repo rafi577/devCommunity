@@ -17,7 +17,7 @@ export class PostController {
 
     @Get(':id')
     @UseGuards(AuthGuard('jwt'))
-    async getAllPostBySpesificUser(@Param('id') id : string):Promise<PostDto[]>{
-        return this.postService.getAllPost(id);
+    async getAllPostBySpecificUser(@Param('id') id : string, @User() user):Promise<PostDto[]>{
+        return this.postService.getAllPostByUser(id, user);
     }
 }
