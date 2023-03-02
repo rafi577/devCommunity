@@ -7,7 +7,7 @@ export type SkillDocument = HydratedDocument<Skill>;
 @Schema({timestamps:true})//
 export class Skill {
 
-    @Prop({required: true,unique: true})
+    @Prop({required: true})
     name : string;
 
     @Prop({required: true})

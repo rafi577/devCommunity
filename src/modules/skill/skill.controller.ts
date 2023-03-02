@@ -4,6 +4,8 @@ import { SkillDto } from './dto/skill.dto';
 import { SkillService } from './skill.service';
 import { User } from 'src/decorators/user.decorator';
 import { UpdateSkillDto } from './dto/updateSkill.dto';
+import { Skill } from 'src/models/skill.schema.dto';
+import { UserDto } from 'src/decorators/dto/user.decorator.dto';
 
 @Controller('skill')
 export class SkillController {
@@ -11,23 +13,20 @@ export class SkillController {
 
     @Post()
     @UseGuards(AuthGuard('jwt'))
-    async create(@Body() body:SkillDto,@User() user ):Promise<SkillDto>{
+    async create(@Body() body:SkillDto,@User() user:UserDto ):Promise<Skill>{
         return this.skillService.create(body,user._id);
     }
 
 
-
-
     //get all skill for a specific developer
-    @Get(':id')
+    @Get()
     @UseGuards(AuthGuard('jwt'))
-    async getSkill(@Param('id') id:string):Promise<SkillDto[]>{
-        return await this.skillService.getSkill(id);
+    async getAllSkillByUser(@User() user:UserDto):Promise<SkillDto[]>{
+        return await this.skillService.getAllSkillByUser(user._id);
     }
 
 
-
-    //update with skill id
+    //update skill with skills id
     @Put(':id')
     @UseGuards(AuthGuard('jwt'))
     async updateSkill(@Body() body:UpdateSkillDto,@Param('id') id : string):Promise<UpdateSkillDto>{

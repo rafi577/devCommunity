@@ -3,6 +3,8 @@ import { PostDto } from './dto/Post.dto';
 import { PostService } from './post.service';
 import { AuthGuard } from '@nestjs/passport';
 import { User } from 'src/decorators/user.decorator';
+import { UserDto } from 'src/decorators/dto/user.decorator.dto';
+import { post} from 'src/models/post.schema';
 
 @Controller('post')
 export class PostController {
@@ -10,14 +12,14 @@ export class PostController {
 
     @Post()
     @UseGuards(AuthGuard('jwt'))
-    async create(@Body() body:PostDto,@User() user): Promise<PostDto> {
+    async create(@Body() body:PostDto,@User() user:UserDto): Promise<post> {
         return await this.postService.create(body,user._id);
     }
 
 
-    @Get(':id')
+    @Get()
     @UseGuards(AuthGuard('jwt'))
-    async getAllPostBySpecificUser(@Param('id') id : string, @User() user):Promise<PostDto[]>{
-        return this.postService.getAllPostByUser(id, user);
+    async getAllPostBySpecificUser(@User() user:UserDto):Promise<PostDto[]>{
+        return this.postService.getAllPostByUser(user);
     }
 }

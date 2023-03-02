@@ -10,7 +10,7 @@ export class CommentService {
 
     constructor(@InjectModel(Comment.name)private readonly commentModel:Model<CommentDocument>){}
 
-    async createComment(body : CommentDto,devId:string,postId:string):Promise<CommentDto> {
+    async createComment(body : CommentDto,devId:string,postId:string):Promise<Comment> {
         const commentData = {
             comment: body.comment,
             devId,

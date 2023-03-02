@@ -4,16 +4,17 @@ import { Model } from 'mongoose';
 
 import * as jwt from 'jsonwebtoken';
 import { PostDto } from './dto/Post.dto';
-import { Post, PostDocument } from 'src/models/post.schema';
+import { post, PostDocument } from 'src/models/post.schema';
 import { ExceptionsHelper } from 'src/helpers/Exceptions.helper';
+import { UserDto } from 'src/decorators/dto/user.decorator.dto';
 
 
 @Injectable()
 export class PostService {
 
-    constructor(@InjectModel(Post.name) private createPostModel: Model<PostDocument>){}
+    constructor(@InjectModel(post.name) private createPostModel: Model<PostDocument>){}
 
-    async create(body : PostDto, id:string): Promise<PostDto> {
+    async create(body : PostDto, id:string): Promise<post> {
         const data = {
             title:body.title,
             description:body.description,
@@ -31,7 +32,7 @@ export class PostService {
     }
 
 
-    async getAllPostByUser(id:string, user):Promise<PostDto[]>{
+    async getAllPostByUser(user:UserDto):Promise<PostDto[]>{
         
         const post =await this.createPostModel.find({devId: user._id});
         if(post){ 

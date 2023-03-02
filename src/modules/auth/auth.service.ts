@@ -86,7 +86,7 @@ export class AuthService {
     }
 
 
-    async getDeveloper(id):Promise<Developer>{
+    async getDeveloper(id:string):Promise<Developer>{
         const developer = await this.developerModel.findById(id);
         return developer;
     }

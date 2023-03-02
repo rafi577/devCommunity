@@ -23,12 +23,4 @@ export class AuthController {
         return await this.authService.login(body);
     }
 
-
-    //test
-    @Get('test')
-    @UseGuards(AuthGuard('jwt'))
-    async test(@User() user:UserDto): Promise<UserDto>{
-        console.log(user);
-        return user;
-    }
 }

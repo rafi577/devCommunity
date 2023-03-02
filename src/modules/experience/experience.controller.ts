@@ -4,6 +4,7 @@ import { ExperienceService } from './experience.service';
 import { ExperienceDto } from './dto/experience.dto';
 import { Experience } from 'src/models/experience.schema';
 import { User } from 'src/decorators/user.decorator';
+import { UserDto } from 'src/decorators/dto/user.decorator.dto';
 
 @Controller('experience')
 export class ExperienceController {
@@ -11,12 +12,12 @@ export class ExperienceController {
 
     @Post()
     @UseGuards(AuthGuard('jwt'))
-    async create(@Body() body: ExperienceDto,@User() user):Promise<Partial<Experience>>{
+    async create(@Body() body: ExperienceDto,@User() user:UserDto):Promise<Partial<Experience>>{
         return this.experienceService.create(body,user._id);
     }
 
 
-    //update with experience id
+    //update experience with experiences id
     @Put(':id')
     @UseGuards(AuthGuard('jwt'))
     async update(@Param('id') id: string, @Body() body: ExperienceDto):Promise<ExperienceDto> {

@@ -7,7 +7,7 @@ export class UserDto{
     fname:string;
     lname:string;
     email:string;
-    password:string;
+    // password:string;
     // createdAt: string;
     // updatedAt: string;
 }
