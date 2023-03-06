@@ -21,15 +21,15 @@ export class SkillController {
     //get all skill for a specific developer
     @Get()
     @UseGuards(AuthGuard('jwt'))
-    async getAllSkillByUser(@User() user:UserDto):Promise<SkillDto[]>{
-        return await this.skillService.getAllSkillByUser(user._id);
+    async getAllSkillByUser(@User() dev:UserDto):Promise<SkillDto[]>{
+        return await this.skillService.getAllSkillByUser(dev._id);
     }
 
 
     //update skill with skills id
     @Put(':id')
     @UseGuards(AuthGuard('jwt'))
-    async updateSkill(@Body() body:UpdateSkillDto,@Param('id') id : string):Promise<UpdateSkillDto>{
-        return this.skillService.updateSkill(body,id);
+    async updateSkill(@Body() body:UpdateSkillDto,@Param('id') skillId : string):Promise<UpdateSkillDto>{
+        return this.skillService.updateSkill(body,skillId);
     }
 }

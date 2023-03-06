@@ -43,9 +43,9 @@ export class SkillService {
         }        
     }
 
-    async getAllSkillByUser(id:string):Promise<SkillDto[]>{
+    async getAllSkillByUser(devId:string):Promise<SkillDto[]>{
     
-        const data = await this.skillModel.find({devId:id});
+        const data = await this.skillModel.find({devId:devId});
         if(data){
             return data;
         }
@@ -54,12 +54,12 @@ export class SkillService {
         }
         
     }
-    async updateSkill(body:UpdateSkillDto,id:string):Promise<UpdateSkillDto>{
+    async updateSkill(body:UpdateSkillDto,skillId:string):Promise<UpdateSkillDto>{
         const data = {
             level:body.level,
         }
     
-        const  updateSkillData = await this.skillModel.findOneAndUpdate({_id:id},data,{new:true});
+        const  updateSkillData = await this.skillModel.findOneAndUpdate({_id:skillId},data,{new:true});
         if(updateSkillData) {
             return updateSkillData.toObject();
         }
